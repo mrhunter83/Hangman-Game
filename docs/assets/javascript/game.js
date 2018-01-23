@@ -38,11 +38,9 @@ function Hangman() {
 		document.onkeydown = function(event) {
 			var input = event.key;
 			input = input.toUpperCase();
-			if(letterSpace.indexOf(input) !== -1) {
-				$("#letterpicked").append(input+" ");
-			}
 			if (guessed.indexOf(input) === -1 && letterSpace.indexOf(input) !== -1) {
 				guessed.push(input);
+				$("#letterpicked").append(input+" ");
 				numGuesses.innerHTML -= 1
 				guessesLeft -= 1;
 				index += 1;
