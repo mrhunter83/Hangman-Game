@@ -1,18 +1,15 @@
 function Hangman() {
 	var wins = 0;
-	document.getElementById("winCount").innerHTML = wins;
+	document.getElementById("winCount").innerHTML = "Wins: "+wins;
 	var emptySpaces = document.getElementById("underscore");
 	var numGuesses = document.getElementById("guessCount");
-	var wordpool = [
-	["R", "I", "C", "K"], 
-	["W", "A", "L", "K", "E", "R", "S"], 
-	["M", "I", "C", "H", "O", "N", "N", "E"], 
-	["V", "I", "R", "U", "S"], 
-	["A", "T", "L", "A", "N", "T", "A"],
-	["L", "U", "C", "I", "L", "L", "E"],
-	["C", "L", "E", "A", "R"],
-	["A", "P", "O", "C", "A", "L", "Y", "P", "S", "E"]
-	];
+	var wordpool = ["RICK", "WALKERS", "MICHONNE", 
+					"VIRUS", "ATLANTA", "LUCILLE", 
+					"CLEAR", "APOCALYPSE", "KATANA SWORD", 
+					"CROSSBOW", "DARYL", "INFECTED", "NEGAN",
+					"CARL", "EYEPATCH", "BITE", "GOVERNOR",
+					"ALEXANDRIA", "HILLTOP", "THE KINGDOM",
+					"SHIVA", "SURVIVE"]
 
 	var letterSpace = 
 	["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -22,24 +19,28 @@ function Hangman() {
 	// INITIALIZE THE GAME PARAMATERS
 
 	function HangmanInit() {
+		$("#playAgain").hide();
 		var randNum = Math.floor((Math.random()*(wordpool.length)));
-		var chosenWord = wordpool[randNum];
+		var chosenWord = wordpool[randNum].split("");
+		console.log(chosenWord);
 		numGuesses.innerHTML = 12;
 		guessesLeft = numGuesses.innerHTML;
 		var spaces = [];
 		var guessed = [];
-		document.getElementById("letterpicked").innerHTML = guessed;
 		var index = 0;
 		for (i = 0; i < chosenWord.length; i++) {
 			spaces.push("_ ");
 		};
-		emptySpaces.innerHTML = spaces;
+		emptySpaces.innerHTML = spaces.join(" ");
 
 		// USER INPUT AND GAME RESPONSE
 
 		document.onkeydown = function(event) {
 			var input = event.key;
 			input = input.toUpperCase();
+			if(letterSpace.indexOf(input) !== -1) {
+				$("#letterpicked").append(input+" ");
+			}
 			if (guessed.indexOf(input) === -1 && letterSpace.indexOf(input) !== -1) {
 				guessed.push(input);
 				numGuesses.innerHTML -= 1
@@ -47,12 +48,10 @@ function Hangman() {
 				index += 1;
 			};
 
-			document.getElementById("letterpicked").innerHTML = guessed;
-
 			for (i = 0; i < chosenWord.length; i++) {
 				if (input === chosenWord[i]) {
 					spaces[i] = chosenWord[i];
-					emptySpaces.innerHTML = spaces;
+					emptySpaces.innerHTML = spaces.join(" ");
 				};
 			};
 
@@ -62,24 +61,19 @@ function Hangman() {
 
 			if (is_same === true) {
 				wins += 1;
-				document.getElementById("winCount").innerHTML = wins;
-				HangmanInit();
+				document.getElementById("winCount").innerHTML = "Wins: "+wins;
+				$("#myModal").modal("show");
+				$("#playAgain").show();
 			}
 			else if (guessesLeft === 0 && is_same === false) {
-				alert("You have run out of guesses.  You lose.");
-				HangmanInit();
+				$("#myModalTwo").modal("show");
+				$("#playAgain").show();
 			}
-
-			// TEST LOGS
-
-			console.log(input);
-			console.log(chosenWord);
-			console.log(index);
-			console.log(guessed);
-			console.log(guessesLeft);
-			console.log(spaces);
-			console.log(is_same);
-			console.log(wins);
 		};
 	};
+
+	$("#playAgain").on("click", function() {
+		$("#letterpicked").empty();
+		HangmanInit();
+	})
 }

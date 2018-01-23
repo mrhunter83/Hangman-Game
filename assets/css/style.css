@@ -2,7 +2,22 @@
 	background-image: url("../images/TWD.jpg");
 }
 
+html, body, .container {
+    height: 100%;
+}
+
 div {
 	text-align: center;
 	color: red;
 }
+
+.eater {
+	font-family: 'Eater', cursive;
+	text-shadow: 4px 4px black;
+}
+
+.mainDiv {}
+
+#myModal {}
+#myModalTwo {}
+#playAgain {}
